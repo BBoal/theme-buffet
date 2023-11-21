@@ -29,7 +29,7 @@
 ;; Theme-Buffet lets the user specify different time periods of the day and for
 ;; each period, a list of preferred themes to be randomly loaded accordingly.
 ;; To install you just have to clone the repo from the url, add the path to the
-;; 'load-path variable and then require the library. Here's an example, for
+;; 'load-path variable and then require the library.  Here's an example, for
 ;; those who still love the Emacs 28 or earlier way of doing things:
 ;;
 ;;    # In the terminal
@@ -60,31 +60,30 @@
 ;;
 ;;
 ;; Following the appanage way of Emacs, both the names and number of themes and
-;; time periods can be freely changed while mantaining the same structure. There
+;; time periods can be freely changed while mantaining the same structure.  There
 ;; is also a time-offset that can be set by the user to match a specific
-;; time-zone/personal preference. E.g
+;; time-zone/personal preference.  E.g
 ;;
 ;;    (setq theme-buffet-time-offset 2)
 ;;
-;; All this can be achieved by tweaking `theme-buffet-end-user'. For
+;; All this can be achieved by tweaking `theme-buffet-end-user'.  For
 ;; inspiration, take a look at `theme-buffet--modus-ef' which is used when
 ;; setting `theme-buffet-menu' to 'modus-ef like demonstrated above.
 ;;
 ;;
-;; Disclaimer from Bruno Boal to the reader: This package was produced during
-;; my learning sessions with Protesilaos "Prot" Stavrou and improved as
-;; homework. Most of the credit goes to him, the mistakes you may find are my
-;; own. Personally, despite the disadvantages and advantages of not being a
+;; Disclaimer from Bruno Boal to the reader: This package was produced during my
+;; learning sessions with Protesilaos "Prot" Stavrou and improved as
+;; homework.  Most of the credit goes to him, the mistakes you may find are my
+;; own.  Personally, despite the disadvantages and advantages of not being a
 ;; professional programmer, it is essential for me to always have fun and
-;; enjoyment during learning and programming. In this respect, mission
-;; accomplished, a big "thank you!" to my mentor. Also, keep in mind at least
+;; enjoyment during learning and programming.  In this respect, mission
+;; accomplished, a big "thank you!" to my mentor.  Also, keep in mind at least
 ;; two things - the fact that this package, like many others before it, has its
 ;; genesis in a collective effort, with didatic purposes and personal use in
 ;; mind, but also that future improvements could and should come from people
 ;; like you, a user of free software.
 ;;
 ;; Happy hacking!
-;;
 
 ;;; Code:
 
@@ -92,9 +91,8 @@
 (defgroup theme-buffet nil
   "Time based theme switcher.
 Assortment of preference based themes available for consumption according to
-the time of the day. A true theme feast for the eyes..."
+the time of the day.  A true theme feast for the eyes..."
   :group 'faces)
-
 
 (defun theme-buffet--set-const-themes ()
   "Get themes from default Emacs build directory and `custom-theme-load-path'.
@@ -105,8 +103,6 @@ non-nil."
             (custom-available-themes)))
 
 (defvar theme-buffet--const-themes (theme-buffet--set-const-themes))
-
-
 
 (defconst theme-buffet--built-in
   '(:night     (wheatgrass manoj-dark modus-vivendi)
@@ -162,8 +158,8 @@ For those who just don't have the time and want the best.")
     :evening   (deeper-blue wombat))
   "Associate day periods with list of themes.
 Each association is of the form `:KEYWORD (THEMES)' where :KEYWORD is one among
-:dark, :twilight, :dawn, etc, and (THEMES), a list of existent themes. Prefilled
-with Emacs default themes as an example to be changed by the user."
+:dark, :twilight, :dawn, etc, and (THEMES), a list of existent themes.
+Prefilled with Emacs default themes as an example to be changed by the user."
   :type `(plist
           :options
           (((const :tag "Darkness of the night" :night)
@@ -175,13 +171,11 @@ with Emacs default themes as an example to be changed by the user."
            ((const :tag "Close to the sunset" :evening)
             (repeat (choice symbol ,@theme-buffet--const-themes))))))
 
-
 (defcustom theme-buffet-menu 'built-in
   "Define which property list to use when selecting the theme list."
   :type '(choice (const :tag "Built-in Emacs themes" built-in)
                  (const :tag "Modus and Ef themes" modus-ef)
                  (const :tag "User specified themes" end-user)))
-
 
 (defun theme-buffet--selected-menu ()
   "Return property list based on given MENU."
@@ -190,34 +184,28 @@ with Emacs default themes as an example to be changed by the user."
     ('modus-ef theme-buffet--modus-ef)
     ('end-user theme-buffet--end-user)))
 
-
 (defun theme-buffet--hours-secs (hours)
   "Number of seconds in HOURS."
   (* hours 60 60))
-
 
 (defconst theme-buffet--secs-in-day
   (theme-buffet--hours-secs 24)
   "Number of seconds in a day.")
 
-
 (defun theme-buffet--keywords ()
   "Get the name of the keywords defining the day periods."
-  (let ((selected-menu (theme-buffet--selected-menu)))
-    (if (plistp selected-menu)
+  (if-let ((selected-menu (theme-buffet--selected-menu))
+           ((plistp selected-menu)))
         (seq-filter #'keywordp selected-menu)
-      (user-error "The Theme-Buffet Chef cannot work with your supplied themes. Check `theme-buffet-menu'"))))
-
+      (user-error "The Theme-Buffet Chef cannot work with your supplied themes.  Check `theme-buffet-menu'")))
 
 (defun theme-buffet--periods ()
   "Get the number of keywords that define the day periods."
   (length (theme-buffet--keywords)))
 
-
 (defun theme-buffet--interval ()
   "Get the number of seconds that each given time period should remain active."
   (/ theme-buffet--secs-in-day (theme-buffet--periods)))
-
 
 (defun theme-buffet--get-time ()
   "Get the `current-time' in seconds."
@@ -229,7 +217,6 @@ with Emacs default themes as an example to be changed by the user."
                              time-smh)))
     (apply #'+ seconds)))
 
-
 (defun theme-buffet--natnum-from-to (start end &optional step)
   "Create a list for applying in defcustom's type choice customization.
 When not provided, STEP will default to 1.
@@ -239,12 +226,10 @@ END-STEP) (const END))"
             (list 'const x))
           (number-sequence start end step)))
 
-
 (defcustom theme-buffet-time-offset 0
   "Added time in HOURS (integer number) to shift the day periods.
 Used for compensate winter/summer times or specific weather situations."
   :type `(choice ,@(theme-buffet--natnum-from-to -12 12)))
-
 
 (defun theme-buffet--get-offset ()
   "Error checking for `theme-buffet-time-offset' variable.
@@ -252,12 +237,11 @@ Has to be an integer number and no greater than 12h in absolute value"
   (cond
    ((or (not (integerp theme-buffet-time-offset))
         (> (abs theme-buffet-time-offset) 12))
-    (message "Theme-Buffet time offset should be an integer number between -12 to 12 instead of `%s'. Resetting to 0."
+    (message "Theme-Buffet offset should be an integer number between -12 to 12 instead of `%s'.  Resetting to 0."
              theme-buffet-time-offset)
     0)
    (t
     (theme-buffet--hours-secs theme-buffet-time-offset))))
-
 
 (defun theme-buffet--current-period ()
   "Get the current period reference the number of keywords in `theme-buffet'."
@@ -266,11 +250,9 @@ Has to be an integer number and no greater than 12h in absolute value"
                      theme-buffet--secs-in-day)))
     (ceiling offset (theme-buffet--interval))))
 
-
 (defun theme-buffet--get-period-keyword ()
   "Get the keyword of the current period as specified in `theme-buffet'."
   (nth (1- (theme-buffet--current-period)) (theme-buffet--keywords)))
-
 
 (defun theme-buffet--reload-theme (chosen-theme &optional added-message)
   "Load CHOSEN-THEME after disabling the current one.
@@ -283,7 +265,6 @@ information."
     (load-theme chosen-theme :no-confirm)
     (message "%s `%s'" message chosen-theme)))
 
-
 (defun theme-buffet--get-theme-list (period)
   "Get list of themes of PERIOD, excluding the current if more are available."
   (when-let ((selected-menu (theme-buffet--selected-menu))
@@ -291,12 +272,11 @@ information."
     (or (remq (car custom-enabled-themes) theme-list)
         theme-list)))
 
-
 (defun theme-buffet--load-random (period)
   "Load random theme according to PERIOD.
 
 Omit current theme if it's not the only pertaining to the list of the
-corresponding period. Being this the case, the same theme shall be served.
+corresponding period.  Being this the case, the same theme shall be served.
 
 An error message will appear if the theme is not available to load through
 `load-theme'."
@@ -306,8 +286,6 @@ An error message will appear if the theme is not available to load through
       (theme-buffet--reload-theme chosen-theme)
     (user-error "Theme-Buffet Chef says `%s' is not known or installed!"
                 chosen-theme)))
-
-
 
 (defvar theme-buffet-theme-history nil
   "Theme-Buffet period history.")
@@ -328,8 +306,6 @@ An error message will appear if the theme is not available to load through
   (let ((chosen-theme (intern (theme-buffet--theme-prompt))))
     (theme-buffet--reload-theme chosen-theme "as per your desires. Enjoy..." )))
 
-
-
 (defvar theme-buffet-period-history nil
   "Theme-Buffet period history.")
 
@@ -348,7 +324,6 @@ An error message will appear if the theme is not available to load through
   (let ((period (intern (theme-buffet--period-prompt))))
     (theme-buffet--load-random period)))
 
-
 ;;;###autoload
 (defun theme-buffet-anything-goes ()
   "Interactively load an existing random theme."
@@ -357,11 +332,8 @@ An error message will appear if the theme is not available to load through
   (theme-buffet--reload-theme (seq-random-elt (custom-available-themes))
                               "as a suprise"))
 
-
-
 (defvar theme-buffet-user-timers-history nil
   "Theme-Buffet user timers history.")
-
 
 ;;;; Period timer
 (defvar theme-buffet-timer-periods nil
@@ -422,7 +394,6 @@ naming."
 (theme-buffet--define-timer hours)  ; (theme-buffet-timer-hours n)
 
 
-
 (defmacro theme-buffet--define-menu-defuns (menu)
   "Define interactive functions to choose property list with themes to use.
 The timer is clean, the chosen MENU is set with it's corresponding keywords."
@@ -456,16 +427,13 @@ opinion.")
 (theme-buffet--define-menu-defuns end-user)  ; (theme-buffet-end-user)
 
 
-
 ;;;###autoload
 (define-minor-mode theme-buffet-mode
   "Theme-Buffet serves your preferred themes according to the time of day.
-You eyes will thank you. Or not...
+You eyes will thank you.  Or not...
 
 The preference for the themes is specified in the `theme-buffet-menu'"
-  :init-value nil
   :global t
-  :keymap nil
   (if theme-buffet-mode
       (unless (plistp (theme-buffet--selected-menu))
            (user-error "`theme-buffet-menu' isn't passing the health inspections as it is!"))
