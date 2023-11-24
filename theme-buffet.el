@@ -256,12 +256,11 @@ Has to be an integer number and no greater than 12h in absolute value"
   "Load CHOSEN-THEME after disabling the current one.
 An additional ADDED-MESSAGE can be appended to the original string for added
 information."
-  (let* ((standard-message "Theme-Buffet served")
-         (message (if added-message (concat standard-message " " added-message)
-                    standard-message)))
+  (let ((standard-message "Theme-Buffet served")
+        (added-message (or added-message "")))
     (mapc #'disable-theme custom-enabled-themes)
     (load-theme chosen-theme :no-confirm)
-    (message "%s `%s'" message chosen-theme)))
+    (message "%s `%s' %s" standard-message chosen-theme added-message)))
 
 (defun theme-buffet--get-theme-list (period)
   "Get list of themes of PERIOD, excluding the current if more are available."
@@ -302,7 +301,7 @@ An error message will appear if the theme is not available to load through
   (declare (interactive-only t))
   (interactive)
   (let ((chosen-theme (intern (theme-buffet--theme-prompt))))
-    (theme-buffet--reload-theme chosen-theme "as per your desires. Enjoy..." )))
+    (theme-buffet--reload-theme chosen-theme "according to your wishes. Enjoy..." )))
 
 (defvar theme-buffet-period-history nil
   "Theme-Buffet period history.")
@@ -344,7 +343,6 @@ An error message will appear if the theme is not available to load through
 ;;;; Minutely timer
 (defvar theme-buffet-timer-mins nil
   "Timer that calls another Theme-Buffet's Sous-Chef into the kitchen.")
-
 
 (defun theme-buffet--free-timer (timer-obj)
   "Cancel and set to nil the timer TIMER-OBJ."
