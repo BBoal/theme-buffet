@@ -43,7 +43,6 @@
 ;;
 ;;    (package-vc-install "https://git.sr.ht/~bboal/theme-buffet")
 ;;
-;;
 ;; There are two templates preconfigured available for usage.  One enabled by
 ;; default, with the standard themes that come with vanilla Emacs; the other
 ;; more fancier, can be easily enabled by evaluating the following:
@@ -53,11 +52,10 @@
 ;; The binding above will set the themes to be either Modus or Ef, authored by
 ;; Protesilaos Stavrou <https://git.sr.ht/~protesilaos>, distributed across six
 ;; periods of the day (night, twilight, morning, day, afternoon and evening).  The
-;; library will require the aforementioned package, installing if
-;; necessary.  Finally to start using Theme-Buffet, evaluate:
+;; library will not require the aforementioned package, you will have to install it
+;; manual if you intent to use it.  Finally to start using Theme-Buffet, evaluate:
 ;;
 ;;    (theme-buffet-mode 1)
-;;
 ;;
 ;; Following the appanage way of Emacs, both the names and number of themes and
 ;; time periods can be freely changed while mantaining the same structure.  There
