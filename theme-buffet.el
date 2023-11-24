@@ -93,9 +93,9 @@ the time of the day.  A true theme feast for the eyes..."
   :group 'faces)
 
 (defun theme-buffet--set-const-themes ()
-  "Get themes from default Emacs build directory and `custom-theme-load-path'.
-Return list for usage in `theme-buffet-menu' type options if PLIST-USAGE is
-non-nil."
+  "Get list of themes from `custom-available-themes'.
+Return a new list with the symbol const prepended to each element for usage in
+`theme-buffet--end-user' type options."
     (mapcar (lambda (theme)
                 (list 'const theme))
             (custom-available-themes)))
@@ -176,7 +176,7 @@ Prefilled with Emacs default themes as an example to be changed by the user."
                  (const :tag "User specified themes" end-user)))
 
 (defun theme-buffet--selected-menu ()
-  "Return property list based on given MENU."
+  "Return property list based on `theme-buffet-menu' value."
   (pcase theme-buffet-menu
     ('built-in theme-buffet--built-in)
     ('modus-ef theme-buffet--modus-ef)
@@ -298,7 +298,7 @@ An error message will appear if the theme is not available to load through
 
 ;;;###autoload
 (defun theme-buffet-a-la-carte ()
-  "Prompt user for theme according to the current period of the day."
+  "Prompt user for a theme according to the current period of the day."
   (declare (interactive-only t))
   (interactive)
   (let ((chosen-theme (intern (theme-buffet--theme-prompt))))
@@ -316,7 +316,7 @@ An error message will appear if the theme is not available to load through
 
 ;;;###autoload
 (defun theme-buffet-order-other-period ()
-  "Interactively load a random theme from the current day period."
+  "Interactively load a random theme from a prompted period."
   (declare (interactive-only t))
   (interactive)
   (let ((period (intern (theme-buffet--period-prompt))))
