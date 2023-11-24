@@ -359,32 +359,30 @@ An error message will appear if the theme is not available to load through
 UNITS is an unquoted symbol, mins or hours and refers to timer of the same
 naming."
   (let ((fn-name (intern (format "theme-buffet-timer-%s" units)))
-        (max-mins 180) (min-mins 1)
-        (max-hours 12) (min-hours -12)
-        (factor
-         (cond
-          ((eq units 'mins) 60)
-          ((eq units 'hours) 3600)
-          (t (user-error
-              "Bad `units' argument on `theme-buffet--define-timer %s'" units)))))
+        (factor (pcase units
+                  ('mins 60)
+                  ('hours 3600)
+                  (_ (user-error
+                      "Bad `units' arg on `theme-buffet--define-timer %s'" units)))))
     `(defun ,fn-name (number)
        ,(format "Set interactively the timer for NUMBER of %s." units)
        (interactive
         (list (read-number ,(format "Theme Buffet service in how many %s? " units)
                            nil
                            'theme-buffet-user-timers-history)))
-       (let ((max-num ,(if (eq units 'mins) max-mins max-hours))
-             (min-num ,(if (eq units 'mins) min-mins min-hours)))
-         (if (or (not (natnump number))
-                 (> number max-num)
-                 (< number min-num))
-             (message "The input number should be a natural between %s and %s instead of `%s'."
-                      min-num max-num number)
-         (let ((timer-secs (* ,factor number)))
-           (setq ,fn-name (run-at-time timer-secs timer-secs
-                                       #'theme-buffet--load-random
-                                       (theme-buffet--get-period-keyword)))
-           (message "Theme-Buffet Sous-Chef is rushing into the kitchen...")))))))
+       (if-let (((natnump number))
+                (max-num ,(if (eq units 'mins) 180 12))
+                (min-num ,(if (eq units 'mins) 1 -12))
+                ((and (>= number min-num)
+                      (<= number max-num)))
+                (timer-secs (* ,factor number)))
+           (progn
+             (setq ,fn-name (run-at-time timer-secs timer-secs
+                                         #'theme-buffet--load-random
+                                         (theme-buffet--get-period-keyword)))
+             (message "Theme-Buffet Sous-Chef is rushing into the kitchen..."))
+         (user-error "The input number should be a natural between %s and %s instead of `%s'."
+                  min-num max-num number)))))
 
 ;;;###autoload (autoload 'theme-buffet-timer-mins "theme-buffet")
 (theme-buffet--define-timer mins)   ; (theme-buffet-timer-mins n)
