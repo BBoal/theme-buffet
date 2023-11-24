@@ -69,6 +69,34 @@
 ;; setting `theme-buffet-menu' to 'modus-ef like demonstrated above.
 ;;
 ;;
+;; Usage:
+;;
+;; There are several interactive functions available to the user serving as
+;; entry points to the package.
+;;
+;; To set the menu for the desired themes property list and have the themes
+;; change when the periods do: `theme-buffet-built-in',
+;; `theme-buffet-modus-ef' and `theme-buffet-end-user'.
+;;
+;; To set the timer for a certain time interval of hours or minutes:
+;;`theme-buffet-timer-hours' or `theme-buffet-timer-mins'.
+;;
+;; To load a theme from the current period: `theme-buffet-a-la-carte'.  If
+;; instead you want to load a random theme from a prompted period, there's
+;; `theme-buffet-order-other-period'.  To load an existing random theme use
+;; `theme-buffet-anything-goes'.
+;;
+;; Some examples in lisp:
+;;
+;;    (theme-buffet-modus-ef) ; to set the theme plist to Modus and Ef
+;;    (theme-buffet-timer-mins 30) ; to change theme every 30m from now
+;;    (theme-buffet-timer-hours 2) ; to also change every 2h from now
+;;
+;; Interactively, as an example, you would press M-x and execute
+;; `theme-buffet-order-other-period'.  Then, after choosing any defined period,
+;;you would get returned a random loaded theme from the aforementioned period.
+
+;;
 ;; Disclaimer from Bruno Boal to the reader: This package was produced during my
 ;; learning sessions with Protesilaos "Prot" Stavrou and improved as
 ;; homework.  Most of the credit goes to him, the mistakes you may find are my
