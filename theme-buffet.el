@@ -381,7 +381,7 @@ naming."
                                          #'theme-buffet--load-random
                                          (theme-buffet--get-period-keyword)))
              (message "Theme-Buffet Sous-Chef is rushing into the kitchen..."))
-         (user-error "The input number should be a natural between %s and %s instead of `%s'."
+         (user-error "The input number should be a natural between %s and %s instead of `%s'"
                   min-num max-num number)))))
 
 ;;;###autoload (autoload 'theme-buffet-timer-mins "theme-buffet")
