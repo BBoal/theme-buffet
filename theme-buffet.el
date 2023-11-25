@@ -6,10 +6,10 @@
 ;;         Protesilaos Stavrou <info@protesilaos.com>
 ;; Maintainer: Theme-Buffet Development <~bboal/general-issues@lists.sr.ht>
 ;; URL: https://git.sr.ht/~bboal/theme-buffet
-;; Version: 0.0.0
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "29.1"))
 
-;; This file is NOT part of GNU Emacs.
+;; This file is part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
