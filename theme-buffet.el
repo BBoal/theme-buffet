@@ -92,9 +92,9 @@
 ;;    (theme-buffet-timer-mins 30) ; to change theme every 30m from now
 ;;    (theme-buffet-timer-hours 2) ; to also change every 2h from now
 ;;
-;; Interactively, as an example, you would press M-x and execute
-;; `theme-buffet-order-other-period'.  Then, after choosing any defined period,
-;;you would get returned a random loaded theme from the aforementioned period.
+;; Interactively, as an example, you would press M-x
+;; `theme-buffet-order-other-period'. Then, after choosing any defined period,
+;; you would get returned a random loaded theme from the aforementioned period.
 
 ;;
 ;; Disclaimer from Bruno Boal to the reader: This package was produced during my
