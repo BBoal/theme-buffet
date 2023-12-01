@@ -297,7 +297,7 @@ information."
     (or (remq (car custom-enabled-themes) theme-list)
         theme-list)))
 
-(defun theme-buffet--load-random (period)
+(defun theme-buffet--load-random (&optional period)
   "Load random theme according to PERIOD.
 
 Omit current theme if it's not the only pertaining to the list of the
@@ -305,12 +305,13 @@ corresponding period.  Being this the case, the same theme shall be served.
 
 An error message will appear if the theme is not available to load through
 `load-theme'."
-  (if-let ((themes (theme-buffet--get-theme-list period))
-           (chosen-theme (seq-random-elt themes))
-           ((memq chosen-theme (custom-available-themes))))
-      (theme-buffet--reload-theme chosen-theme)
-    (user-error "Theme-Buffet Chef says `%s' is not known or installed!"
-                chosen-theme)))
+  (let ((period (or period (theme-buffet--get-period-keyword))))
+    (if-let ((themes (theme-buffet--get-theme-list period))
+             (chosen-theme (seq-random-elt themes))
+             ((memq chosen-theme (custom-available-themes))))
+        (theme-buffet--reload-theme chosen-theme)
+      (user-error "Theme-Buffet Chef says `%s' is not known or installed!"
+                  chosen-theme))))
 
 (defvar theme-buffet-theme-history nil
   "Theme-Buffet period history.")
@@ -433,12 +434,12 @@ opinion.")
     `(defun ,(intern (format "theme-buffet-%s" menu)) ()
        ,docstring
        (interactive)
+       (or theme-buffet-mode (theme-buffet-mode 1))
        (theme-buffet--free-timer 'theme-buffet-timer-periods)
        (setq theme-buffet-menu (quote ,menu)
              theme-buffet-timer-periods
              (run-at-time t (theme-buffet--interval)
-                          #'theme-buffet--load-random
-                          (theme-buffet--get-period-keyword)))
+                          #'theme-buffet--load-random))
        (message "Sucess! Theme-Buffet Chef is firing up %s themes..." ',menu))))
 
 ;;;###autoload (autoload 'theme-buffet-built-in "theme-buffet")
