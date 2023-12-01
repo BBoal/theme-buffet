@@ -373,13 +373,25 @@ An error message will appear if the theme is not available to load through
 (defvar theme-buffet-timer-mins nil
   "Timer that calls another Theme-Buffet's Sous-Chef into the kitchen.")
 
-(defun theme-buffet--free-timer (timer-obj)
-  "Cancel and set to nil the timer TIMER-OBJ."
+(defun theme-buffet--free-timer (timer-obj &optional no-message)
+  "Cancel and set to nil the timer TIMER-OBJ.
+With optional NO-MESSAGE, does not notify the user."
   (when-let (((boundp timer-obj))
              (obj (symbol-value timer-obj)))
     (cancel-timer obj)
     (set timer-obj nil)
-    (message "Break time in the Theme-Buffet kitchen!")))
+    (unless no-message
+      (message "Break time in the Theme-Buffet kitchen!"))))
+
+
+(defun theme-buffet-free-all-timers ()
+  "Give a break to Theme-Buffet staff.
+All timer variables and functions are canceled."
+  (interactive)
+  (cancel-function-timers #'theme-buffet--load-random)
+  (mapc (lambda (timer)
+          (theme-buffet--free-timer timer :no-message))
+        '(theme-buffet-timer-mins theme-buffet-timer-hours theme-buffet-timer-periods)))
 
 
 (defmacro theme-buffet--define-timer (units)
@@ -460,7 +472,7 @@ The preference for the themes is specified in the `theme-buffet-menu'"
   (if theme-buffet-mode
       (unless (plistp (theme-buffet--selected-menu))
            (user-error "`theme-buffet-menu' isn't passing the health inspections as it is!"))
-    (cancel-function-timers #'theme-buffet--load-random)))
+    (theme-buffet-free-all-timers)))
 
 
 (provide 'theme-buffet)
