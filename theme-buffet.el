@@ -409,17 +409,24 @@ naming."
        ,(format "Set interactively the timer for NUMBER of %s.
 When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
        (interactive
-        (list (read-number ,(format "Theme Buffet service in how many %s? " units) nil
-                           'theme-buffet-user-timers-history)))
+        (list (read-number
+               ,(format "Theme Buffet service in how many %s? (0 to cancel) " units) nil
+               'theme-buffet-user-timers-history)))
+       (or theme-buffet-mode (theme-buffet-mode 1))
        (if-let (((natnump number))
                 ((<= number ,max-num))
-                (timer-secs (* ,factor number)))
-           (if (equal number 0)
+                (timer-secs (* ,factor number))
+                (msg-1 "Theme-Buffet Sous-Chef is ")
+                (msg-2 "rushing into the kitchen..."))
+           (if (= number 0)
                (theme-buffet--free-timer ',fn-name)
+             (setq msg-2 (if ,fn-name
+                             "waiting for the requisition"
+                           msg-2))
+             (theme-buffet--free-timer ',fn-name :no-message)
              (setq ,fn-name (run-at-time timer-secs timer-secs
-                                         #'theme-buffet--load-random
-                                         (theme-buffet--get-period-keyword)))
-             (message "Theme-Buffet Sous-Chef is rushing into the kitchen..."))
+                                         #'theme-buffet--load-random))
+             (message (concat msg-1 msg-2)))
          (user-error "The input number should be a natural up to %s instead of `%s'"
                      ,max-num number)))))
 
