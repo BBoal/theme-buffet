@@ -51,16 +51,17 @@
 ;;
 ;; The binding above will set the themes to be either Modus or Ef, authored by
 ;; Protesilaos Stavrou <https://git.sr.ht/~protesilaos>, distributed across six
-;; periods of the day (night, twilight, morning, day, afternoon and evening).  The
-;; library will not require the aforementioned package, you will have to install it
-;; manual if you intent to use it.  Finally to start using Theme-Buffet, evaluate:
+;; periods of the day (night, twilight, morning, day, afternoon and evening).
+;; The library will not require the aforementioned package, you will have to
+;; install it manual if you intent to use it.  Finally to start using
+;; Theme-Buffet, evaluate:
 ;;
 ;;    (theme-buffet-mode 1)
 ;;
 ;; Following the appanage way of Emacs, both the names and number of themes and
-;; time periods can be freely changed while mantaining the same structure.  There
-;; is also a time-offset that can be set by the user to match a specific
-;; time-zone/personal preference.  E.g
+;; time periods can be freely changed while mantaining the same structure.
+;; There is also a time-offset that can be set by the user to match a specific
+;; time-zone/personal preference. E.g
 ;;
 ;;    (setq theme-buffet-time-offset 2)
 ;;
@@ -98,9 +99,9 @@
 
 ;;
 ;; Disclaimer from Bruno Boal to the reader: This package was produced during my
-;; learning sessions with Protesilaos "Prot" Stavrou and improved as
-;; homework.  Most of the credit goes to him, the mistakes you may find are my
-;; own.  Personally, despite the disadvantages and advantages of not being a
+;; learning sessions with Protesilaos "Prot" Stavrou and improved as homework.
+;; Most of the credit goes to him, the mistakes you may find are my own.
+;; Personally, despite the disadvantages and advantages of not being a
 ;; professional programmer, it is essential for me to always have fun and
 ;; enjoyment during learning and programming.  In this respect, mission
 ;; accomplished, a big "thank you!" to my mentor.  Also, keep in mind at least
@@ -330,7 +331,8 @@ An error message will appear if the theme is not available to load through
   (declare (interactive-only t))
   (interactive)
   (let ((chosen-theme (intern (theme-buffet--theme-prompt))))
-    (theme-buffet--reload-theme chosen-theme "according to your wishes. Enjoy..." )))
+    (theme-buffet--reload-theme chosen-theme
+                                "according to your wishes. Enjoy..." )))
 
 (defvar theme-buffet-period-history nil
   "Theme-Buffet period history.")
@@ -383,7 +385,6 @@ With optional NO-MESSAGE, does not notify the user."
     (unless no-message
       (message "Break time in the Theme-Buffet kitchen!"))))
 
-
 (defun theme-buffet-free-all-timers ()
   "Give a break to Theme-Buffet staff.
 All timer variables and functions are canceled."
@@ -391,7 +392,9 @@ All timer variables and functions are canceled."
   (cancel-function-timers #'theme-buffet--load-random)
   (mapc (lambda (timer)
           (theme-buffet--free-timer timer :no-message))
-        '(theme-buffet-timer-mins theme-buffet-timer-hours theme-buffet-timer-periods)))
+        '(theme-buffet-timer-mins
+          theme-buffet-timer-hours
+          theme-buffet-timer-periods)))
 
 
 (defmacro theme-buffet--define-timer (units)
@@ -409,9 +412,10 @@ naming."
        ,(format "Set interactively the timer for NUMBER of %s.
 When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
        (interactive
-        (list (read-number
-               ,(format "Theme Buffet service in how many %s? (0 to cancel) " units) nil
-               'theme-buffet-user-timers-history)))
+        (list
+         (read-number
+          ,(format "Theme Buffet service in how many %s? (0 to cancel) " units)
+          nil 'theme-buffet-user-timers-history)))
        (or theme-buffet-mode (theme-buffet-mode 1))
        (if-let (((natnump number))
                 ((<= number ,max-num))
