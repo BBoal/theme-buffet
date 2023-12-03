@@ -396,6 +396,38 @@ All timer variables and functions are canceled."
           theme-buffet-timer-hours
           theme-buffet-timer-periods)))
 
+(defun theme-buffet--active-timers ()
+  "Get list of strings with the suffix of the active timers.
+E.g If both the periods and mins timers are active, the returned list is as
+  follows: (\"periods\" \"mins\")"
+  (let* ((var-len (length "theme-buffet-timer-"))
+         (active-timers
+          (mapcar (lambda (x)
+                    (if (symbol-value x)
+                        (substring (symbol-name x) var-len)))
+                  '(theme-buffet-timer-periods
+                    theme-buffet-timer-mins
+                    theme-buffet-timer-hours))))
+    (delq nil active-timers)))
+
+(defun theme-buffet-clear-timers ()
+  "Check active timers and prompt the user to choose which to clear."
+  (declare (interactive-only t))
+  (interactive)
+  (if-let ((prompt "Choose a timer to clear/cancel: ")
+           (collection (theme-buffet--active-timers))
+           (choice (completing-read prompt collection nil t)))
+      (cond
+       ((string-equal choice "periods")
+        (theme-buffet--free-timer 'theme-buffet-timer-periods))
+       ((string-equal choice "mins")
+        (theme-buffet--free-timer 'theme-buffet-timer-mins))
+       ((string-equal choice "hours")
+        (theme-buffet--free-timer 'theme-buffet-timer-hours))
+       (t
+        (user-error "Invalid choice in `theme-buffet-clear-timers'")))
+    (user-error "You haven't send a single Chef into the kitchen... ")))
+
 
 (defmacro theme-buffet--define-timer (units)
   "Define interactive functions to set timer in UNITS.
