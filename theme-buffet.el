@@ -465,7 +465,7 @@ When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
        (if-let (((natnump number))
                 ((<= number ,max-num))
                 (timer-secs (* ,factor number))
-                (msg-1 "Theme-Buffet Sous-Chef is ")
+                (msg-1 "Theme-Buffet Sous-Chef is")
                 (msg-2 "rushing into the kitchen..."))
            (if (= number 0)
                (theme-buffet--free-timer ',fn-name)
@@ -475,7 +475,7 @@ When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
              (theme-buffet--free-timer ',fn-name :no-message)
              (setq ,fn-name (run-at-time timer-secs timer-secs
                                          #'theme-buffet--load-random))
-             (message (concat msg-1 msg-2)))
+             (message "%s %s" msg-1 msg-2))
          (user-error "The input number should be a natural up to %s instead of `%s'"
                      ,max-num number)))))
 
