@@ -6,7 +6,7 @@
 ;;         Protesilaos Stavrou <info@protesilaos.com>
 ;; Maintainer: Theme-Buffet Development <~bboal/general-issues@lists.sr.ht>
 ;; URL: https://git.sr.ht/~bboal/theme-buffet
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Package-Requires: ((emacs "29.1"))
 
 ;; This file is part of GNU Emacs.
