@@ -61,7 +61,7 @@
 ;; Following the appanage way of Emacs, both the names and number of themes and
 ;; time periods can be freely changed while mantaining the same structure.
 ;; There is also a time-offset that can be set by the user to match a specific
-;; time-zone/personal preference. E.g
+;; time-zone/personal preference.  E.g
 ;;
 ;;    (setq theme-buffet-time-offset 2)
 ;;
@@ -94,7 +94,7 @@
 ;;    (theme-buffet-timer-hours 2) ; to also change every 2h from now
 ;;
 ;; Interactively, as an example, you would press M-x
-;; `theme-buffet-order-other-period'. Then, after choosing any defined period,
+;; `theme-buffet-order-other-period'.  Then, after choosing any defined period,
 ;; you would get returned a random loaded theme from the aforementioned period.
 
 ;;
@@ -429,6 +429,19 @@ E.g If both the periods and mins timers are active, the returned list is as
     (user-error "You haven't send a single Chef into the kitchen... ")))
 
 
+;;;###autoload
+(define-minor-mode theme-buffet-mode
+  "Theme-Buffet serves your preferred themes according to the time of day.
+You eyes will thank you.  Or not...
+
+The preference for the themes is specified in the `theme-buffet-menu'"
+  :global t
+  (if theme-buffet-mode
+      (unless (plistp (theme-buffet--selected-menu))
+           (user-error "`theme-buffet-menu' isn't passing the health inspections as it is!"))
+    (theme-buffet-free-all-timers)))
+
+
 (defmacro theme-buffet--define-timer (units)
   "Define interactive functions to set timer in UNITS.
 UNITS is an unquoted symbol, mins or hours and refers to timer of the same
@@ -439,7 +452,7 @@ naming."
       ('mins (setq factor 60 max-num 180))
       ('hours (setq factor 3600 max-num 12))
       (_ (user-error
-          "Bad `units' arg on `theme-buffet--define-timer %s'" units)))
+          "Wrong arg on `theme-buffet--define-timer': %s" units)))
     `(defun ,fn-name (number)
        ,(format "Set interactively the timer for NUMBER of %s.
 When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
@@ -504,18 +517,6 @@ opinion.")
 ;;;###autoload (autoload 'theme-buffet-end-user "theme-buffet")
 (theme-buffet--define-menu-defuns end-user)  ; (theme-buffet-end-user)
 
-
-;;;###autoload
-(define-minor-mode theme-buffet-mode
-  "Theme-Buffet serves your preferred themes according to the time of day.
-You eyes will thank you.  Or not...
-
-The preference for the themes is specified in the `theme-buffet-menu'"
-  :global t
-  (if theme-buffet-mode
-      (unless (plistp (theme-buffet--selected-menu))
-           (user-error "`theme-buffet-menu' isn't passing the health inspections as it is!"))
-    (theme-buffet-free-all-timers)))
 
 
 (provide 'theme-buffet)
