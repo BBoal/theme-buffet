@@ -402,9 +402,9 @@ E.g If both the periods and mins timers are active, the returned list is as
   follows: (\"periods\" \"mins\")"
   (let* ((var-len (length "theme-buffet-timer-"))
          (active-timers
-          (mapcar (lambda (x)
-                    (if (symbol-value x)
-                        (substring (symbol-name x) var-len)))
+          (mapcar (lambda (timer)
+                    (if (symbol-value timer)
+                        (substring (symbol-name timer) var-len)))
                   '(theme-buffet-timer-periods
                     theme-buffet-timer-mins
                     theme-buffet-timer-hours))))
@@ -426,7 +426,7 @@ E.g If both the periods and mins timers are active, the returned list is as
         (theme-buffet--free-timer 'theme-buffet-timer-hours))
        (t
         (user-error "Invalid choice in `theme-buffet-clear-timers'")))
-    (user-error "You haven't send a single Chef into the kitchen... ")))
+    (user-error "You didn't send a single Chef into the kitchen")))
 
 
 ;;;###autoload
