@@ -330,12 +330,14 @@ An error message will appear if the theme is not available to load through
 
 ;;;###autoload
 (defun theme-buffet-a-la-carte ()
-  "Prompt user for a theme according to the current period of the day."
-  (declare (interactive-only t))
+  "Prompt user for a theme according to the current period of the day.
+When called from Lisp code, load a random theme from the current day period."
   (interactive)
-  (let ((chosen-theme (intern (theme-buffet--theme-prompt))))
-    (theme-buffet--reload-theme chosen-theme
-                                "according to your wishes. Enjoy..." )))
+  (if-let (((called-interactively-p 'interactive))
+           (chosen-theme (intern (theme-buffet--theme-prompt))))
+      (theme-buffet--reload-theme chosen-theme
+                                  "according to your wishes. Enjoy..." )
+    (theme-buffet--load-random)))
 
 (defvar theme-buffet-period-history nil
   "Theme-Buffet period history.")
@@ -348,12 +350,18 @@ An error message will appear if the theme is not available to load through
     (completing-read prompt collection nil t nil history-var)))
 
 ;;;###autoload
-(defun theme-buffet-order-other-period ()
-  "Interactively load a random theme from a prompted period."
-  (declare (interactive-only t))
+(defun theme-buffet-order-other-period (&optional period)
+  "Interactively load a random theme from a prompted period.
+When called from Lisp code, load a random theme from PERIOD."
   (interactive)
-  (let ((period (intern (theme-buffet--period-prompt))))
-    (theme-buffet--load-random period)))
+  (cond
+   ((called-interactively-p 'interactive)
+    (theme-buffet--load-random (intern (theme-buffet--period-prompt))))
+   ((memq period (theme-buffet--keywords))
+    (theme-buffet--load-random period))
+   (t
+    (user-error
+     "Theme-Buffet doesn't know '%s' and is unable to serve you" period))))
 
 ;;;###autoload
 (defun theme-buffet-anything-goes ()
