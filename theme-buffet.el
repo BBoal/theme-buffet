@@ -178,7 +178,10 @@ Return a new list with the symbol const prepended to each element for usage in
   "Different periods of the day combined with Ef or Modus themes.
 For those who just don't have the time and want the best.")
 
-(defcustom theme-buffet--end-user
+(define-obsolete-variable-alias 'theme-buffet--end-user
+                                'theme-buffet-end-user "0.2.0dev")
+
+(defcustom theme-buffet-end-user
   '(:night     (wheatgrass manoj-dark modus-vivendi)
     :morning   (adwaita whiteboard leuven modus-operandi tango dichromacy tsdh-light)
     :afternoon (leuven-dark tango-dark tsdh-dark misterioso)
@@ -209,7 +212,7 @@ Prefilled with Emacs default themes as an example to be changed by the user."
   (pcase theme-buffet-menu
     ('built-in theme-buffet--built-in)
     ('modus-ef theme-buffet--modus-ef)
-    ('end-user theme-buffet--end-user)))
+    ('end-user theme-buffet-end-user)))
 
 (defun theme-buffet--hours-secs (hours)
   "Number of seconds in HOURS."
