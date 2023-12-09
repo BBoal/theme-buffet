@@ -495,6 +495,13 @@ When NUMBER is 0, the timer is cancelled. Maximum value is %s" units max-num)
 ;;;###autoload (autoload 'theme-buffet-timer-hours "theme-buffet")
 (theme-buffet--define-timer hours)  ; (theme-buffet-timer-hours n)
 
+(defun theme-buffet--time-next-period()
+  "Calculates the seconds remaining for the next change of period."
+  (let ((next-run (theme-buffet--interval))
+        (now (theme-buffet--get-time)))
+    (while (< next-run now)
+      (setq now (- now next-run)))
+  (- next-run now)))
 
 (defmacro theme-buffet--define-menu-defuns (menu)
   "Define interactive functions to choose property list with themes to use.
@@ -517,7 +524,8 @@ opinion.")
        (theme-buffet--free-timer 'theme-buffet-timer-periods)
        (setq theme-buffet-menu (quote ,menu)
              theme-buffet-timer-periods
-             (run-at-time t (theme-buffet--interval)
+             (run-at-time (theme-buffet--time-next-period)
+                          (theme-buffet--interval)
                           #'theme-buffet--load-random))
        (message "Sucess! Theme-Buffet Chef is firing up %s themes..." ',menu))))
 
