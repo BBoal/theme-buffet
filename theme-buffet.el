@@ -233,7 +233,13 @@ END-STEP) (const END))"
 
 (defcustom theme-buffet-time-offset 0
   "Added time in HOURS (integer number) to shift the day periods.
-Used for compensate winter/summer times or specific weather situations."
+Used for compensate a cloudy day or other specific weather situation.
+
+An interesting choice could be:
+
+ \\='(/ (cadr (calendar-current-time-zone)) 60)\\='
+
+To reference your daylight saving time if applicable."
   :type `(choice ,@(theme-buffet--natnum-from-to -12 12)))
 
 (defun theme-buffet--get-offset ()
