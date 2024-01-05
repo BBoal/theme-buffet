@@ -162,6 +162,7 @@ Return a new list with the symbol const prepended to each element for usage in
                 modus-operandi
                 modus-operandi-deuteranopia)
     :afternoon (ef-cyprus
+                ef-arbutus
                 ef-day
                 ef-duo-light
                 ef-kassio
