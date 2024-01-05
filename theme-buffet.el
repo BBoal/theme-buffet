@@ -1,12 +1,12 @@
 ;;; theme-buffet.el --- Time based theme switcher -*- lexical-binding: t -*-
 
-;; Copyright (C) 2023  Free Software Foundation, Inc.
+;; Copyright (C) 2023-2024  Free Software Foundation, Inc.
 
 ;; Author: Bruno Boal <egomet@bboal.com>,
 ;;         Protesilaos Stavrou <info@protesilaos.com>
 ;; Maintainer: Theme-Buffet Development <~bboal/general-issues@lists.sr.ht>
 ;; URL: https://git.sr.ht/~bboal/theme-buffet
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Package-Requires: ((emacs "29.1"))
 
 ;; This file is part of GNU Emacs.
